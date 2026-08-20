@@ -11,8 +11,8 @@ import (
 	"github.com/nats-io/nkeys"
 	"github.com/rs/zerolog/log"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/claims/user/v1alpha1"
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/claims/user/v1alpha1"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 )
 
 type IssueUserStorage struct {
@@ -93,6 +93,7 @@ func pathUserIssue(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteUserIssue,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages user cmd's.`,
 			HelpDescription: ``,
 		},
@@ -115,6 +116,7 @@ func pathUserIssue(b *NatsBackend) []*framework.Path {
 					Callback: b.pathListUserIssues,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    "pathRoleListHelpSynopsis",
 			HelpDescription: "pathRoleListHelpDescription",
 		},

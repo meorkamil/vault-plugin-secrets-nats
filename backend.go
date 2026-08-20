@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -332,4 +332,15 @@ func (b *NatsBackend) periodicRefreshAccountIssues(ctx context.Context, storage 
 		}
 	}
 	return nil
+}
+
+func (b *NatsBackend) pathOperatorExistenceCheck(
+	ctx context.Context, req *logical.Request, d *framework.FieldData,
+) (bool, error) {
+	name := d.Get("operator").(string)
+	entry, err := req.Storage.Get(ctx, "operator/"+name)
+	if err != nil {
+		return false, err
+	}
+	return entry != nil, nil
 }

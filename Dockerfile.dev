@@ -1,9 +1,9 @@
-FROM ghcr.io/loft-sh/devspace-containers/go:1.18-alpine
+FROM golang:1.26.4-alpine3.24
 
 
-RUN mkdir -p /tmp/build && \
+RUN mkdir -p /tmp/build && apk add make curl wget vim unzip && \
     cd /tmp/build && \
-    wget https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip && \
-    unzip vault_1.12.1_linux_amd64.zip && \
+    wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
+    unzip vault_1.19.5_linux_amd64.zip && \
     mv vault /usr/local/bin && \
     rm -rf /tmp/build

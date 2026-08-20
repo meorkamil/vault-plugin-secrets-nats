@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -49,6 +49,7 @@ func pathUserCreds(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteUserCreds,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages user Creds's.`,
 			HelpDescription: ``,
 		},
@@ -71,6 +72,7 @@ func pathUserCreds(b *NatsBackend) []*framework.Path {
 					Callback: b.pathListUserCreds,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    "pathRoleListHelpSynopsis",
 			HelpDescription: "pathRoleListHelpDescription",
 		},

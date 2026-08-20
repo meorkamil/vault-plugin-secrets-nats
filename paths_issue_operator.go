@@ -11,10 +11,10 @@ import (
 	"github.com/nats-io/nkeys"
 	"github.com/rs/zerolog/log"
 
-	accountv1 "github.com/edgefarm/vault-plugin-secrets-nats/pkg/claims/account/v1alpha1"
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/claims/common"
-	operatorv1 "github.com/edgefarm/vault-plugin-secrets-nats/pkg/claims/operator/v1alpha1"
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	accountv1 "github.com/meorkamil/vault-plugin-secrets-nats/pkg/claims/account/v1alpha1"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/claims/common"
+	operatorv1 "github.com/meorkamil/vault-plugin-secrets-nats/pkg/claims/operator/v1alpha1"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 )
 
 type IssueOperatorStorage struct {
@@ -92,6 +92,7 @@ func pathOperatorIssue(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteOperatorIssue,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages operator issueing.`,
 			HelpDescription: ``,
 		},
@@ -102,6 +103,7 @@ func pathOperatorIssue(b *NatsBackend) []*framework.Path {
 					Callback: b.pathListOperatorIssues,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    "pathRoleListHelpSynopsis",
 			HelpDescription: "pathRoleListHelpDescription",
 		},
