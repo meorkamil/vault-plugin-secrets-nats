@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/nats-io/jwt/v2"
@@ -46,6 +46,7 @@ func pathAccountJWT(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteAccountJWT,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages account JWT's.`,
 			HelpDescription: ``,
 		},
@@ -63,6 +64,7 @@ func pathAccountJWT(b *NatsBackend) []*framework.Path {
 					Callback: b.pathListAccountJWT,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `List account JWT's.`,
 			HelpDescription: ``,
 		},

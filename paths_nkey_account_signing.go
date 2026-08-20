@@ -3,7 +3,7 @@ package natsbackend
 import (
 	"context"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/nats-io/nkeys"
@@ -50,6 +50,7 @@ func pathAccountSigningNkey(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteAccountSigningNkey,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages account signing Nkey keypairs.`,
 			HelpDescription: `On Create or Update: If no account signing Nkey keypair is passed, a corresponding Nkey is generated.`,
 		},

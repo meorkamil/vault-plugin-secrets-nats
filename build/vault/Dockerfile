@@ -1,4 +1,4 @@
-FROM vault:1.12.5
+FROM hashicorp/vault:1.19.5
 RUN mkdir -p /etc/vault/vault_plugins
 RUN mkdir -p /etc/vault/vault_plugins_checksums
 COPY build/vault/plugins/vault-plugin-secrets-nats-linux-amd64 /etc/vault/vault_plugins/vault-plugin-secrets-nats

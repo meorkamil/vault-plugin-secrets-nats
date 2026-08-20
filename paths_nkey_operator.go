@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/edgefarm/vault-plugin-secrets-nats/pkg/stm"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/nats-io/nkeys"
@@ -41,6 +41,7 @@ func pathOperatorNkey(b *NatsBackend) []*framework.Path {
 					Callback: b.pathDeleteOperatorNkey,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    `Manages operator Nkeys.`,
 			HelpDescription: `On create/update: If no operator Nkey seed is passed, a corresponding Nkey is generated.`,
 		},
@@ -51,6 +52,7 @@ func pathOperatorNkey(b *NatsBackend) []*framework.Path {
 					Callback: b.pathListOperatorNkeys,
 				},
 			},
+			ExistenceCheck:  b.pathOperatorExistenceCheck,
 			HelpSynopsis:    "pathRoleListHelpSynopsis",
 			HelpDescription: "pathRoleListHelpDescription",
 		},

@@ -20,7 +20,7 @@ generate:
 
 all: fmt build start
 
-build: generate
+build: #generate
 	CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(GO_ARCH) go build -o build/vault/plugins/vault-plugin-secrets-nats-$(OS)-$(GO_ARCH) -gcflags "all=-N -l" -ldflags '-extldflags "-static"' cmd/vault-plugin-secrets-nats/main.go
 
 docker: build
