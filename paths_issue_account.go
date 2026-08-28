@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/resolver"
-	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/resolver"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/nats-io/nkeys"
 	"github.com/rs/zerolog/log"
 
@@ -693,7 +693,14 @@ func refreshAccountResolver(ctx context.Context, storage logical.Storage, issue 
 	}
 
 	// connect to nats
-	resolver, err := resolver.NewResolver(op.Claims.AccountServerURL, []byte(sysUserJWT.JWT), sysUserKp)
+	resolver, err := resolver.NewResolver(
+		op.Claims.AccountServerURL,
+		op.Claims.AccountServerTLSCert,
+		op.Claims.AccountServerTLSKey,
+		op.Claims.AccountServerTLSCa,
+		[]byte(sysUserJWT.JWT), sysUserKp,
+	)
+
 	if err != nil {
 		log.Warn().Str("operator", issue.Operator).
 			Str("account", issue.Account).

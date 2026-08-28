@@ -21,10 +21,11 @@ func (r *Resolver) CloseConnection() {
 
 func isNatsUrl(url string) bool {
 	url = strings.ToLower(strings.TrimSpace(url))
-	return strings.HasPrefix(url, "nats://") || strings.HasPrefix(url, ",nats://")
+	return strings.HasPrefix(url, "nats://") || strings.HasPrefix(url, ",nats://") || strings.HasPrefix(url, "tls://") || strings.HasPrefix(url, ",tls://")
+
 }
 
-func createConnection(url string, userJWT []byte, userKp nkeys.KeyPair) (*nats.Conn, error) {
+func createConnection(url string, cert string, key string, ca string, userJWT []byte, userKp nkeys.KeyPair) (*nats.Conn, error) {
 	if !isValidURL(url) {
 		return nil, fmt.Errorf("invalid url: %s", url)
 	}
@@ -43,20 +44,30 @@ func createConnection(url string, userJWT []byte, userKp nkeys.KeyPair) (*nats.C
 			})
 	}
 
-	return nats.Connect(url, createDefaultToolOptions("nsc_push", getOpt(string(userJWT), userKp))...)
+	// Set default TLS as false. Only enable when url contain "tls"
+	tlsEnabled := false
+	if strings.Contains(url, "tls") {
+		tlsEnabled = true
+	}
+
+	return nats.Connect(url, createDefaultToolOptions("nsc_push", cert, key, ca, tlsEnabled, getOpt(string(userJWT), userKp))...)
 }
 
-func createDefaultToolOptions(name string, o ...nats.Option) []nats.Option {
+func createDefaultToolOptions(name string, cert string, key string, ca string, tlsEnabled bool, o ...nats.Option) []nats.Option {
 	connectTimeout := 5 * time.Second
 	totalWait := 10 * time.Minute
 	reconnectDelay := 2 * time.Second
 
 	opts := []nats.Option{nats.Name(name)}
 	opts = append(opts, nats.Timeout(connectTimeout))
-	// todo: add tls
-	// opts = append(opts, rootCAsNats)
-	// opts = append(opts, tlsKeyNats)
-	// opts = append(opts, tlsCertNats)
+
+	// Set TLS Configuration
+	if tlsEnabled {
+		log.Info().Msgf("TLS Configuration: cert: %s, key: %s, ca: %s", cert, key, ca)
+		opts = append(opts, nats.RootCAs(ca))
+		opts = append(opts, nats.ClientCert(cert, key))
+	}
+
 	opts = append(opts, nats.ReconnectWait(reconnectDelay))
 	opts = append(opts, nats.MaxReconnects(int(totalWait/reconnectDelay)))
 	opts = append(opts, nats.DisconnectErrHandler(func(nc *nats.Conn, err error) {
@@ -92,7 +103,7 @@ func isValidURL(s string) bool {
 		return false
 	}
 	scheme := strings.ToLower(u.Scheme)
-	supported := []string{"http", "https", "nats"}
+	supported := []string{"http", "https", "nats", "tls"}
 
 	ok := false
 	for _, v := range supported {
