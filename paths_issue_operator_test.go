@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/hashicorp/vault/sdk/logical"
 	v1alpha1 "github.com/meorkamil/vault-plugin-secrets-nats/pkg/claims/operator/v1alpha1"
 	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
-	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/nats-io/jwt/v2"
 	"github.com/stretchr/testify/assert"
 )
@@ -122,7 +122,10 @@ func TestCRUDOperatorIssue(t *testing.T) {
 		stm.StructToMap(&IssueOperatorParameters{
 			Claims: v1alpha1.OperatorClaims{
 				Operator: v1alpha1.Operator{
-					AccountServerURL: "http://localhost:9090",
+					AccountServerURL:     "http://localhost:9090",
+					AccountServerTLSCert: "cert.pem",
+					AccountServerTLSKey:  "nats.key",
+					AccountServerTLSCa:   "ca.pem",
 				},
 			},
 		}, &request)
@@ -134,7 +137,10 @@ func TestCRUDOperatorIssue(t *testing.T) {
 			Operator: "op1",
 			Claims: v1alpha1.OperatorClaims{
 				Operator: v1alpha1.Operator{
-					AccountServerURL: "http://localhost:9090",
+					AccountServerURL:     "http://localhost:9090",
+					AccountServerTLSCert: "cert.pem",
+					AccountServerTLSKey:  "nats.key",
+					AccountServerTLSCa:   "ca.pem",
 				},
 			},
 			Status: IssueOperatorStatus{

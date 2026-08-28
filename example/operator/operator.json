@@ -2,7 +2,10 @@
     "syncAccountServer": true,
     "claims": {
         "operator": {
-            "accountServerUrl": "nats://localhost:4222",
+            "accountServerUrl": "tls://localhost:4222",
+	    "accountServerTLSCert": "/etc/vault/cert.pem",
+	    "accountServerTLSKey": "/etc/vault/nats.key",
+	    "accountServerTLSCa": "/etc/vault/ca.pem",
             "signingKeys": [
                 "opsk1"
             ]

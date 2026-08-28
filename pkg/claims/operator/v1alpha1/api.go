@@ -27,6 +27,13 @@ type Operator struct {
 	// https://github.com/nats-io/nats-account-server.
 	// +kubebuilder:validation:Optional
 	AccountServerURL string `json:"accountServerUrl,omitempty"`
+	// Below are configurations for TLS, this is for mTLS connection only.
+	// AccountServerTLSCert is a absolute path for TLS Certificate
+	// AccountServerTLSKey is a absolute path for TLS Key
+	// AccountServerTLSCa is a absolute path for CA Chain
+	AccountServerTLSCert string `json:"accountServerTLSCert,omitempty"`
+	AccountServerTLSKey  string `json:"accountServerTLSKey,omitempty"`
+	AccountServerTLSCa   string `json:"accountServerTLSCa,omitempty"`
 	// A list of NATS urls (tls://host:port) where tools can connect to the server
 	// using proper credentials.
 	// +kubebuilder:validation:Optional

@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
+	"github.com/meorkamil/vault-plugin-secrets-nats/pkg/stm"
 )
 
 // natsBackend defines an object that
